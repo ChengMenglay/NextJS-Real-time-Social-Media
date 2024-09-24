@@ -1,11 +1,15 @@
-import Link from 'next/link'
-import React from 'react'
+import React from "react";
+import { getMembers } from "../(auth)/actions/memberAction";
+import MemberCard from "./MemberCard";
+import { fetchCurrentUserLikeIds } from "../(auth)/actions/likeAction";
 
-export default function MembersPage() {
+export default async function MembersPage() {
+  const memberData = await getMembers();
+  const likeIds = await fetchCurrentUserLikeIds();
   return (
-    <div>
-        <h3 className='text-3xl'>This will be the members page</h3>
-        <Link href={'/'}>Go back</Link>
+    <div className="px-4 my-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-8">
+      {memberData &&
+        memberData.map((item) => <MemberCard key={item.id} member={item} likeIds={likeIds} />)}
     </div>
-  )
+  );
 }
